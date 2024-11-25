@@ -1,13 +1,19 @@
 {
-  "type": "module", 
+  "type": "module",
   "scripts": {
     "start": "vercel dev",
     "deploy": "vercel"
   },
   "dependencies": {
-    "hono": "^4.4.2"
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
+    "@prisma/client": "^5.22.0",
+    "bcrypt": "^5.1.1",
+    "hono": "^4.4.2",
+    "prisma": "^5.22.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "vercel": "^32.4.1"
   }
 }
