@@ -1,19 +1,29 @@
 {
+  "name": "kai-server",
   "type": "module",
+  "version": "1.0.0",
+  "license": "MIT",
   "scripts": {
-    "start": "vercel dev",
-    "deploy": "vercel"
+    "dev": "tsx watch src/index.ts",
+    "vercel:dev": "npm run build && vercel dev",
+    "start": "node ./dist/src/index.js",
+    "build": "tsc && tsc-alias"
   },
   "dependencies": {
+    "@hono/node-server": "^1.13.7",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "@prisma/client": "^5.22.0",
     "bcrypt": "^5.1.1",
-    "hono": "^4.4.2",
+    "hono": "^4.6.12",
     "prisma": "^5.22.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "vercel": "^32.4.1"
+    "@types/node": "^22.10.0",
+    "tsc-alias": "^1.8.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vercel": "^39.1.2"
   }
 }

@@ -1,13 +1,13 @@
 import { Context } from "hono";
-import { deleteCookie, getCookie, setCookie } from "hono/cookie";
+import { deleteCookie, setCookie } from "hono/cookie";
 
-import db from "../../lib/db.js";
-import hasher from "../../lib/hasher.js";
+import db from "../../lib/db";
+import hasher from "../../lib/hasher";
 import {
   createSession,
   generateSessionToken,
   invalidateSession,
-} from "../../lib/session.js";
+} from "../../lib/session";
 
 export function getUser(c: Context) {
   var user = c.get("user");
@@ -22,7 +22,6 @@ export function getUser(c: Context) {
 
 export async function checkUser(c: Context) {
   const { q } = c.req.query();
-  console.log(q);
 
   var user = await db.user.findFirst({
     where: {
@@ -40,11 +39,7 @@ export async function checkUser(c: Context) {
 export async function registerUser(c: Context) {
   const { email, phoneNumber, password } = await c.req.json();
 
-  console.log({ email, phoneNumber, password });
-
   const passwordHash = await hasher.hash(password);
-
-  console.log({ passwordHash });
 
   const { id: userId } = await db.user.create({
     data: {
@@ -73,6 +68,7 @@ export async function registerUser(c: Context) {
 
 export async function loginUser(c: Context) {
   const { email, phoneNumber, password } = await c.req.json();
+  console.log({ email, phoneNumber, password });
 
   var user = await db.user.findFirst({
     where: {
@@ -81,13 +77,13 @@ export async function loginUser(c: Context) {
   });
 
   if (!user) {
-    return c.status(404);
+    return c.json({ message: "User not found" }, 404);
   }
 
   const passwordMatch = await hasher.verify(password, user.passwordHash);
 
   if (!passwordMatch) {
-    return c.status(401);
+    return c.json({ message: "Password is wrong" }, 401);
   }
 
   const token = generateSessionToken();
@@ -100,13 +96,11 @@ export async function loginUser(c: Context) {
     expires: session.expiresAt,
   });
 
-  return c.status(200);
+  return c.json({ message: "Logged in" }, 200);
 }
 
 export async function logoutUser(c: Context) {
   const session = c.get("session");
-
-  console.log(session);
 
   if (session) {
     await invalidateSession(session.id);

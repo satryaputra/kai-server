@@ -1,7 +1,7 @@
 import { Context } from "hono";
 import { getCookie } from "hono/cookie";
 
-import { validateSessionToken } from "../lib/session.js";
+import { validateSessionToken } from "../src/lib/session";
 
 const whitelist = ["/login", "/register", "/check", "/team"];
 
