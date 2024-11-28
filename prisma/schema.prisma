@@ -61,10 +61,11 @@ model Routes {
 }
 
 model Train {
-    id     String  @id @default(uuid())
-    name   String?
-    line   Line    @relation(references: [id], fields: [lineId])
-    lineId String
+    id            String          @id @default(uuid())
+    name          String?
+    line          Line            @relation(references: [id], fields: [lineId])
+    lineId        String
+    TrainPosition TrainPosition[]
 }
 
 model TrainPosition {
@@ -74,4 +75,6 @@ model TrainPosition {
     long        Int?
     speed       Float?
     destination String?
+    train       Train     @relation(references: [id], fields: [trainId])
+    trainId     String
 }
