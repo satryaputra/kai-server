@@ -25,3 +25,56 @@ model Session {
 
     user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
+
+model Line {
+    id       String   @id @default(uuid())
+    name     String
+    fareId   String?
+    stations Routes[]
+    train    Train[]
+    Fare     Fare[]
+}
+
+model Fare {
+    id     String @id @default(uuid())
+    price  Float
+    line   Line   @relation(fields: [lineId], references: [id])
+    lineId String
+}
+
+model Station {
+    id    String   @id @default(uuid())
+    name  String?
+    code  String?
+    lat   Int?
+    long  Int?
+    lines Routes[]
+}
+
+model Routes {
+    id        String  @id @default(uuid())
+    line      Line    @relation(fields: [lineId], references: [id])
+    lineId    String
+    station   Station @relation(fields: [stationId], references: [id])
+    stationId String
+    order     Int
+}
+
+model Train {
+    id            String          @id @default(uuid())
+    name          String?
+    line          Line            @relation(references: [id], fields: [lineId])
+    lineId        String
+    TrainPosition TrainPosition[]
+}
+
+model TrainPosition {
+    id          String    @id @default(uuid())
+    dateTime    DateTime?
+    lat         Int?
+    long        Int?
+    speed       Float?
+    destination String?
+    train       Train     @relation(references: [id], fields: [trainId])
+    trainId     String
+}
